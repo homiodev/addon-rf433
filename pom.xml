@@ -6,6 +6,10 @@
   <modelVersion>4.0.0</modelVersion>
   <name>RF433 sniffer</name>
   <packaging>jar</packaging>
+  
+  <properties>
+    <category>Other</category>
+  </properties>
 
   <parent>
     <artifactId>addon-parent</artifactId>
