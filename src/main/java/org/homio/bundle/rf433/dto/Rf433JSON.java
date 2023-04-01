@@ -1,4 +1,4 @@
-package org.touchhome.bundle.rf433.dto;
+package org.homio.bundle.rf433.dto;
 
 import java.util.ArrayList;
 import java.util.List;

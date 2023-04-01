@@ -1,6 +1,6 @@
-package org.touchhome.bundle.rf433.model;
+package org.homio.bundle.rf433.model;
 
-import org.touchhome.bundle.api.ui.field.UIField;
+import org.homio.bundle.api.ui.field.UIField;
 
 import javax.persistence.Entity;
 
@@ -17,10 +17,5 @@ public class RF433SignalEntity extends RF433DeviceEntity {
 
   public void setPath(String path) {
     this.path = path;
-  }
-
-  @Override
-  public String getShortTitle() {
-    return "Rf433Sig";
   }
 }

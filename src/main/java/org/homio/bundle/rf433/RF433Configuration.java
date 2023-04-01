@@ -1,7 +1,7 @@
-package org.touchhome.bundle.rf433;
+package org.homio.bundle.rf433;
 
 import org.springframework.context.annotation.Configuration;
-import org.touchhome.bundle.api.BundleConfiguration;
+import org.homio.bundle.api.BundleConfiguration;
 
 @Configuration
 @BundleConfiguration

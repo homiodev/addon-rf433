@@ -1,15 +1,6 @@
-package org.touchhome.bundle.rf433;
+package org.homio.bundle.rf433;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.springframework.stereotype.Component;
-import org.touchhome.bundle.api.EntityContext;
-import org.touchhome.bundle.api.util.TouchHomeUtils;
-import org.touchhome.bundle.rf433.dto.Rf433JSON;
-import org.touchhome.bundle.rf433.model.RF433SignalEntity;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -21,33 +12,49 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.IntStream;
-
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.homio.bundle.api.BundleEntrypoint;
+import org.homio.bundle.api.EntityContext;
+import org.homio.bundle.api.EntityContextSetting;
+import org.homio.bundle.api.util.CommonUtils;
+import org.homio.bundle.rf433.dto.Rf433JSON;
+import org.homio.bundle.rf433.model.RF433SignalEntity;
+import org.springframework.stereotype.Component;
 
 @Log4j2
 @Component
 @RequiredArgsConstructor
 public class Rf433Entrypoint implements BundleEntrypoint {
 
-  private static Path rf433Dir = TouchHomeUtils.resolvePath("rf433");
+  private static Path rf433Dir = CommonUtils.resolvePath("rf433");
   private final EntityContext entityContext;
   private Path rf433TransmitterPy;
   private Path rf433ReceiverPy;
   private boolean isTestApplication = false;
 
   public void init() {
-    if (EntityContext.isDevEnvironment()) {
+    if (EntityContextSetting.isDevEnvironment()) {
       return;
     }
     try {
       FileUtils.cleanDirectory(rf433Dir.toFile());
       rf433TransmitterPy = rf433Dir.resolve("rf433Transmitter.py");
-      Files.copy(TouchHomeUtils.getFilesPath().resolve("rf433").resolve("rf433Transmitter.py"), rf433TransmitterPy,
+      Files.copy(CommonUtils.getFilesPath().resolve("rf433").resolve("rf433Transmitter.py"), rf433TransmitterPy,
           REPLACE_EXISTING);
 
       rf433ReceiverPy = rf433Dir.resolve("rf433Sniffer.py");
-      Files.copy(TouchHomeUtils.getFilesPath().resolve("rf433").resolve("rf433Sniffer.py"), rf433ReceiverPy,
+      Files.copy(CommonUtils.getFilesPath().resolve("rf433").resolve("rf433Sniffer.py"), rf433ReceiverPy,
           REPLACE_EXISTING);
     } catch (IOException e) {
       log.error(e.getMessage(), e);
@@ -96,16 +103,16 @@ public class Rf433Entrypoint implements BundleEntrypoint {
         signal.values[i++] = value == '1' ? 1 : 0;
       }
     } else {
-      signal.times = TouchHomeUtils.readFile("test/RECEIVED_SIGNAL_0_CONVERTED")
-          .stream()
-          .map(line -> {
-            BigDecimal value = new BigDecimal(line);
-            value = value.setScale(rf433JSON.getSignalAccuracy(), RoundingMode.HALF_EVEN);
-            return value.floatValue();
-          }).toArray(Float[]::new);
-      signal.values = TouchHomeUtils.readFile("test/RECEIVED_SIGNAL_1")
-          .stream()
-          .map(v -> v.equals("1") ? 1 : 0).toArray(Integer[]::new);
+      signal.times = CommonUtils.readFile("test/RECEIVED_SIGNAL_0_CONVERTED")
+                                .stream()
+                                .map(line -> {
+                                  BigDecimal value = new BigDecimal(line);
+                                  value = value.setScale(rf433JSON.getSignalAccuracy(), RoundingMode.HALF_EVEN);
+                                  return value.floatValue();
+                                }).toArray(Float[]::new);
+      signal.values = CommonUtils.readFile("test/RECEIVED_SIGNAL_1")
+                                 .stream()
+                                 .map(v -> v.equals("1") ? 1 : 0).toArray(Integer[]::new);
     }
     return signal;
   }

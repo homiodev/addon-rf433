@@ -1,10 +1,10 @@
-package org.touchhome.bundle.rf433.repository;
+package org.homio.bundle.rf433.repository;
 
+import org.homio.bundle.rf433.model.RF433SignalEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.touchhome.bundle.api.entity.BaseEntity;
-import org.touchhome.bundle.api.repository.AbstractRepository;
-import org.touchhome.bundle.rf433.model.RF433SignalEntity;
+import org.homio.bundle.api.entity.BaseEntity;
+import org.homio.bundle.api.repository.AbstractRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;

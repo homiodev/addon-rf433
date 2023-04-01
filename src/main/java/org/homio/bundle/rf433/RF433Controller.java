@@ -1,12 +1,12 @@
-package org.touchhome.bundle.rf433;
+package org.homio.bundle.rf433;
 
+import org.homio.bundle.rf433.dto.Rf433JSON;
+import org.homio.bundle.rf433.model.RF433SignalEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.touchhome.bundle.rf433.dto.Rf433JSON;
-import org.touchhome.bundle.rf433.model.RF433SignalEntity;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -91,9 +91,9 @@ public class RF433Controller {
         if (rf433JSON.getForce()) {
             PinRepository.PinEntryBinding pinEntryBinding = pinRepository.findByEntityID(RF433DevicePlugin.class, PinPool.INPUT);
             signal = rf433Manager.readSignal(pinEntryBinding.getSourceBCMPin().getAddress(), rf433JSON);
-            TouchHomeUtils.serialize(signal);
+            homioUtils.serialize(signal);
         } else {
-            signal = TouchHomeUtils.deSerialize(Rf433Manager.RF433Signal.class);
+            signal = homioUtils.deSerialize(Rf433Manager.RF433Signal.class);
         }
 
         if (rf433JSON.getOmitDuplicateTime()) {

@@ -1,7 +1,7 @@
-package org.touchhome.bundle.rf433.model;
+package org.homio.bundle.rf433.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.touchhome.bundle.api.entity.DeviceBaseEntity;
+import org.homio.bundle.api.entity.DeviceBaseEntity;
 
 import javax.persistence.Entity;
 
@@ -17,12 +17,12 @@ import javax.persistence.Entity;
 public class RF433DeviceEntity extends DeviceBaseEntity<RF433DeviceEntity> {
 
   @Override
-  public String getShortTitle() {
-    return "Rf433";
+  public String getEntityPrefix() {
+    return "rf433_";
   }
 
   @Override
-  public String getEntityPrefix() {
-    return "rf433_";
+  public String getDefaultName() {
+    return "433";
   }
 }
